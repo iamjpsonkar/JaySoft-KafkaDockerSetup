@@ -49,19 +49,23 @@ services:
     container_name: kafka
     restart: unless-stopped
 
-  kafdrop:
-    image: obsidiandynamics/kafdrop:latest
+  akhq:
+    image: tchiotludo/akhq:latest
     platform: linux/arm64
     environment:
-      KAFKA_BROKERCONNECT: kafka:9093
-      MESSAGE_MAX_BYTES: 200000000
+      AKHQ_CONFIGURATION: |
+        akhq:
+          connections:
+            default:
+              properties:
+                bootstrap.servers: "kafka:9093"
     ports:
-      - "9000:9000"
+      - "8080:8080"
     networks:
       - kafka-net
     depends_on:
       - kafka
-    container_name: kafdrop
+    container_name: akhq
     restart: unless-stopped
 
 networks:

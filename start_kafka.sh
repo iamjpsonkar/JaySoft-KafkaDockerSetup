@@ -10,7 +10,7 @@ fi
 echo "Pulling necessary Docker images..."
 docker-compose pull
 
-# Start Kafka, Zookeeper, and the UI app (Kafdrop)
+# Start Kafka, Zookeeper, and the UI app (AKHQ)
 echo "Starting services..."
 docker-compose up --build -d
 
@@ -18,11 +18,18 @@ docker-compose up --build -d
 echo "Waiting for Kafka and Zookeeper to be ready..."
 sleep 15
 
-# Open Kafdrop UI in default browser
-echo "Opening Kafdrop UI..."
-open http://localhost:9000
+# Open AKHQ UI in the default browser
+echo "Opening AKHQ UI..."
+open http://localhost:8080
 
-echo "Kafka, Zookeeper, and Kafdrop are now running."
+echo "Kafka, Zookeeper, and AKHQ are now running."
 
-echo "Creating kafka topics"
-docker exec -it kafka /usr/bin/kafka-topics --create --topic "fynd-json-gringotts-payment_status" --bootstrap-server localhost:9093 --partitions 1 --replication-factor 1
+# Create Kafka topics
+echo "Creating Kafka topics..."
+docker exec -it kafka /usr/bin/kafka-topics --create \
+    --topic "fynd-json-gringotts-payment_status" \
+    --bootstrap-server localhost:9093 \
+    --partitions 1 \
+    --replication-factor 1
+
+echo "Kafka topic 'fynd-json-gringotts-payment_status' created successfully."
