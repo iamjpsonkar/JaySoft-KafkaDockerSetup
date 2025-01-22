@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   zookeeper:
-    image: bitnami/zookeeper:latest
+    image: bitnami/zookeeper:3.9.3 # Use a stable version instead of latest
     platform: linux/arm64
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -21,7 +21,7 @@ services:
     restart: unless-stopped
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.3.0 # Use a stable version instead of latest
     platform: linux/arm64
     environment:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
@@ -50,7 +50,7 @@ services:
     restart: unless-stopped
 
   akhq:
-    image: tchiotludo/akhq:latest
+    image: tchiotludo/akhq:0.24.0 # Use a stable version instead of latest
     platform: linux/arm64
     environment:
       AKHQ_CONFIGURATION: |
