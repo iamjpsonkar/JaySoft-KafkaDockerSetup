@@ -2,8 +2,7 @@ version: '3.8'
 
 services:
   zookeeper:
-    image: bitnami/zookeeper:3.9.3 # Use a stable version instead of latest
-    platform: linux/arm64
+    image: "confluentinc/cp-zookeeper:7.3.0"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -21,12 +20,13 @@ services:
     restart: unless-stopped
 
   kafka:
-    image: confluentinc/cp-kafka:7.3.0 # Use a stable version instead of latest
+    image: "confluentinc/cp-kafka:7.3.0"
     platform: linux/arm64
     environment:
+      KAFKA_BROKER_ID: 1
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: INSIDE://kafka:9093,OUTSIDE://localhost:9092
-      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092
+      KAFKA_LISTENERS: INSIDE://0.0.0.0:9093,OUTSIDE://localhost:9092
       KAFKA_LISTENER_NAMES: INSIDE,OUTSIDE
       KAFKA_LISTENER_SECURITY_PROTOCOL_INSIDE: PLAINTEXT
       KAFKA_LISTENER_SECURITY_PROTOCOL_OUTSIDE: PLAINTEXT
@@ -34,9 +34,7 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       ALLOW_PLAINTEXT_LISTENER: "yes"
-      KAFKA_MESSAGE_MAX_BYTES: 200000000
-      KAFKA_REPLICA_FETCH_MAX_BYTES: 200000000
-      KAFKA_MAX_REQUEST_SIZE: 200000000
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
     ports:
       - "9092:9092"
       - "9093:9093"
@@ -49,23 +47,19 @@ services:
     container_name: kafka
     restart: unless-stopped
 
-  akhq:
-    image: tchiotludo/akhq:0.24.0 # Use a stable version instead of latest
-    platform: linux/arm64
-    environment:
-      AKHQ_CONFIGURATION: |
-        akhq:
-          connections:
-            default:
-              properties:
-                bootstrap.servers: "kafka:9093"
+  kafka_ui:
+    container_name: kafka_ui
+    image: "provectuslabs/kafka-ui:v0.7.2"
+    hostname: kafka_ui
     ports:
       - "8080:8080"
-    networks:
-      - kafka-net
+    environment:
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka:9093"
+      SERVER_SERVLET_CONTEXT_PATH: "/"
     depends_on:
       - kafka
-    container_name: akhq
+    networks:
+      - kafka-net
     restart: unless-stopped
 
 networks:

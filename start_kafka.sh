@@ -10,7 +10,7 @@ fi
 echo "Pulling necessary Docker images..."
 docker-compose pull
 
-# Start Kafka, Zookeeper, and the UI app (AKHQ)
+# Start Kafka, Zookeeper, and the UI app (KAfka UI)
 echo "Starting services..."
 docker-compose up --build -d
 
@@ -18,11 +18,11 @@ docker-compose up --build -d
 echo "Waiting for Kafka and Zookeeper to be ready..."
 sleep 15
 
-# Open AKHQ UI in the default browser
-echo "Opening AKHQ UI..."
+# Open KAfka UI in the default browser
+echo "Opening Apache Kafka UI..."
 open http://localhost:8080
 
-echo "Kafka, Zookeeper, and AKHQ are now running."
+echo "Kafka, Zookeeper, and Kafka UI are now running."
 
 # Create Kafka topics
 echo "Creating Kafka topics..."
