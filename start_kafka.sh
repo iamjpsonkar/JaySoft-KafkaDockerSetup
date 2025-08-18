@@ -28,6 +28,14 @@ wait_for_service_health() {
             return 0
         fi
         
+        # Special handling for kafka_ui - check if it's accessible externally
+        if [ "$service_name" = "kafka_ui" ]; then
+            if curl -s http://localhost:8080 > /dev/null 2>&1; then
+                print_message "$service_name is responding (accessible via HTTP)!" $GREEN
+                return 0
+            fi
+        fi
+        
         if [ $((attempt % 10)) -eq 0 ]; then
             print_message "Still waiting for $service_name... (attempt $attempt/$max_attempts)" $YELLOW
         fi
