@@ -1,0 +1,32 @@
+# Kafka data directories
+kafka_data/
+zookeeper_data/
+
+# Environment files
+.env
+
+# Docker compose override
+docker-compose.override.yml
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.tar.gz
+*.zip
+backup/
+
+.DS_Store
