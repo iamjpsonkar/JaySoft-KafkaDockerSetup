@@ -39,7 +39,7 @@ show_usage() {
 
 # Function to check if services are running
 check_services_running() {
-    if docker-compose ps | grep -q "Up"; then
+    if docker-compose ps -a | grep -q "Up"; then
         return 0  # Services are running
     else
         return 1  # Services are not running
@@ -48,7 +48,7 @@ check_services_running() {
 
 # Function to check if services are paused (stopped but containers exist)
 check_services_paused() {
-    if docker-compose ps | grep -q "Exited" && ! docker-compose ps | grep -q "Up"; then
+    if docker-compose ps -a | grep -q "Exited" && ! docker-compose ps -a | grep -q "Up"; then
         return 0  # Services are paused
     else
         return 1  # Services are not paused
