@@ -160,7 +160,22 @@ if check_services_running; then
     
 else
     print_message "❌ Failed to resume services properly." $RED
-    print_message "💡 Try these troubleshooting steps:" $YELLOW
+    print_message "🔄 Attempting automatic recovery with build_kafka.sh..." $YELLOW
+    
+    # Try to run build_kafka.sh automatically
+    if [ -f "./build_kafka.sh" ]; then
+        print_message "Running build_kafka.sh for automatic recovery..." $BLUE
+        if ./build_kafka.sh; then
+            print_message "✅ Automatic recovery successful!" $GREEN
+            exit 0
+        else
+            print_message "❌ Automatic recovery failed." $RED
+        fi
+    else
+        print_message "⚠️  build_kafka.sh not found in current directory" $YELLOW
+    fi
+    
+    print_message "\n💡 Manual troubleshooting steps:" $YELLOW
     print_message "  • Check logs: docker-compose logs" $NC
     print_message "  • Restart fresh: ./start_kafka.sh" $NC
     print_message "  • Complete rebuild: ./build_kafka.sh --clean" $NC

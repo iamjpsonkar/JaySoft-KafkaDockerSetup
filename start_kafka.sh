@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 
 # Function to print colored output
 print_message() {
-    echo -e "${2}${1}${NC}"
+    echo -e ta"${2}${1}${NC}"
 }
 
 # Function to show usage
@@ -27,7 +27,7 @@ show_usage() {
     print_message "Usage: $0 [options]" $YELLOW
     print_message "Options:" $NC
     print_message "  --create-topics, -t    Create example topics after startup" $NC
-    print_message "  --no-browser, -n       Don't open browser automatically" $NC
+    print_message "  --open-browser, -b     Open browser automatically (default: no browser)" $NC
     print_message "  --help, -h             Show this help message" $NC
     print_message "" $NC
     print_message "This script starts the Kafka Docker environment:" $BLUE
@@ -77,7 +77,7 @@ wait_for_service_health() {
 
 # Parse command line arguments
 CREATE_TOPICS=false
-NO_BROWSER=false
+OPEN_BROWSER=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -85,8 +85,8 @@ while [[ $# -gt 0 ]]; do
             CREATE_TOPICS=true
             shift
             ;;
-        --no-browser|-n)
-            NO_BROWSER=true
+        --open-browser|-b)
+            OPEN_BROWSER=true
             shift
             ;;
         --help|-h)
@@ -173,8 +173,8 @@ if [ "$CREATE_TOPICS" = true ]; then
     print_message "Example topics created: test-topic, events" $GREEN
 fi
 
-# Open Kafka UI in browser (only on macOS and if not disabled)
-if [[ "$OSTYPE" == "darwin"* ]] && [ "$NO_BROWSER" = false ]; then
+# Open Kafka UI in browser (only on macOS and if requested)
+if [[ "$OSTYPE" == "darwin"* ]] && [ "$OPEN_BROWSER" = true ]; then
     print_message "\nOpening Kafka UI in browser..." $BLUE
     sleep 2
     open http://localhost:8080

@@ -58,9 +58,10 @@ bash /path/to/kafka-docker-setup/stop_kafka.sh
 
 ### kafka_resume.sh
 - **Purpose**: Quick service resumption
-- **Does**: Resume paused services with health checks
+- **Does**: Resume paused services with health checks, auto-recovery
 - **Options**: --help
 - **Use when**: Resuming after pause, quick restart
+- **Auto-recovery**: Runs build_kafka.sh if resume fails
 
 ### stop_kafka.sh
 - **Purpose**: Complete shutdown
@@ -74,12 +75,13 @@ bash /path/to/kafka-docker-setup/stop_kafka.sh
 ```bash
 ./build_kafka.sh --clean    # Fresh build (removes existing images)
 ./build_kafka.sh --force    # Force rebuild even if images exist
+./build_kafka.sh --open-browser  # Open browser automatically
 ```
 
 ### Start Options:
 ```bash
 ./start_kafka.sh --create-topics  # Create example topics
-./start_kafka.sh --no-browser     # Don't open browser
+./start_kafka.sh --open-browser   # Open browser automatically
 ```
 
 ### Stop Options:

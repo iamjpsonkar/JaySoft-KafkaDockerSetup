@@ -28,6 +28,7 @@ show_usage() {
     print_message "Options:" $NC
     print_message "  --force, -f     Force rebuild even if images exist" $NC
     print_message "  --clean, -c     Clean build (remove existing images first)" $NC
+    print_message "  --open-browser, -b  Open browser automatically (default: no browser)" $NC
     print_message "  --help, -h      Show this help message" $NC
     print_message "" $NC
     print_message "This script builds and starts the Kafka Docker environment:" $BLUE
@@ -42,6 +43,7 @@ show_usage() {
 # Parse command line arguments
 FORCE_REBUILD=false
 CLEAN_BUILD=false
+OPEN_BROWSER=false
 
 while [[ $# -gt 0 ]]; do
     case $1 in
@@ -51,6 +53,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --clean|-c)
             CLEAN_BUILD=true
+            shift
+            ;;
+        --open-browser|-b)
+            OPEN_BROWSER=true
             shift
             ;;
         --help|-h)
@@ -220,8 +226,8 @@ print_message "📊 Kafka UI: http://localhost:8080" $BLUE
 print_message "🔗 Kafka Broker: localhost:9092" $BLUE
 print_message "🏪 Zookeeper: localhost:2181" $BLUE
 
-# Open Kafka UI in browser (only on macOS)
-if [[ "$OSTYPE" == "darwin"* ]]; then
+# Open Kafka UI in browser (only on macOS and if requested)
+if [[ "$OSTYPE" == "darwin"* ]] && [ "$OPEN_BROWSER" = true ]; then
     print_message "\nOpening Kafka UI in browser..." $BLUE
     sleep 2
     open http://localhost:8080
