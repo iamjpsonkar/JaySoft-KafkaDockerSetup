@@ -34,7 +34,7 @@ show_usage() {
     print_message "  • Status: Shows current pause/resume state" $NC
     print_message "" $NC
     print_message "Use this for temporary stops (lunch break, meetings, etc.)" $YELLOW
-    print_message "To resume paused services, use './kafka_resume.sh'" $YELLOW
+    print_message "To resume paused services, use './resume_kafka.sh'" $YELLOW
     print_message "For permanent shutdown, use './stop_kafka.sh'" $YELLOW
 }
 
@@ -70,7 +70,7 @@ pause_services() {
     
     print_message "✅ Services paused successfully!" $GREEN
     print_message "💾 All data and state preserved" $BLUE
-    print_message "🔄 Use './kafka_resume.sh' to quickly restart" $YELLOW
+    print_message "🔄 Use './resume_kafka.sh' to quickly restart" $YELLOW
 }
 
 
@@ -83,7 +83,7 @@ show_status() {
         print_message "💡 Use './pause_kafka.sh' to pause services" $YELLOW
     elif check_services_paused; then
         print_message "🟡 Status: PAUSED" $YELLOW
-        print_message "💡 Use './pause_kafka.sh --resume' to resume services" $YELLOW
+        print_message "💡 Use './resume_kafka.sh' to resume services" $YELLOW
     else
         print_message "🔴 Status: STOPPED" $RED
         print_message "💡 Use './start_kafka.sh' to start services" $YELLOW
@@ -122,6 +122,6 @@ esac
 print_message "\n💡 Quick Commands:" $BLUE
 print_message "  $0              - Pause services" $NC
 print_message "  $0 --status     - Show status" $NC
-print_message "  ./kafka_resume.sh - Resume services" $NC
+print_message "  ./resume_kafka.sh - Resume services" $NC
 print_message "  ./start_kafka.sh - Fresh start" $NC
 print_message "  ./stop_kafka.sh  - Complete shutdown" $NC

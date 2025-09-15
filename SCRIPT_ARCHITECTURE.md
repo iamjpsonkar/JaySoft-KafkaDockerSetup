@@ -7,7 +7,7 @@
 | **build_kafka.sh** | Complete Setup | Builds images, starts services, health checks |
 | **start_kafka.sh** | Quick Start | Starts services only (assumes images exist) |
 | **pause_kafka.sh** | Temporary Stop | Pause services with data preservation |
-| **kafka_resume.sh** | Quick Resume | Resume paused services with health checks |
+| **resume_kafka.sh** | Quick Resume | Resume paused services with health checks |
 | **stop_kafka.sh** | Complete Shutdown | Full stop with data management options |
 
 ## 🚀 Quick Start Workflow
@@ -26,13 +26,13 @@ bash /path/to/kafka-docker-setup/build_kafka.sh
 # From anywhere on your system:
 bash /path/to/kafka-docker-setup/start_kafka.sh
 bash /path/to/kafka-docker-setup/pause_kafka.sh
-bash /path/to/kafka-docker-setup/kafka_resume.sh
+bash /path/to/kafka-docker-setup/resume_kafka.sh
 bash /path/to/kafka-docker-setup/stop_kafka.sh
 
 # Or from the project directory:
 ./start_kafka.sh
 ./pause_kafka.sh
-./kafka_resume.sh
+./resume_kafka.sh
 ./stop_kafka.sh
 ```
 
@@ -56,7 +56,7 @@ bash /path/to/kafka-docker-setup/stop_kafka.sh
 - **Options**: --status, --help
 - **Use when**: Lunch breaks, meetings, quick stops
 
-### kafka_resume.sh
+### resume_kafka.sh
 - **Purpose**: Quick service resumption
 - **Does**: Resume paused services with health checks, auto-recovery
 - **Options**: --help
@@ -93,7 +93,7 @@ bash /path/to/kafka-docker-setup/stop_kafka.sh
 ## 💡 Best Practices
 
 1. **First time**: Use `./build_kafka.sh`
-2. **Daily work**: Use `./start_kafka.sh`, `./pause_kafka.sh`, and `./kafka_resume.sh`
+2. **Daily work**: Use `./start_kafka.sh`, `./pause_kafka.sh`, and `./resume_kafka.sh`
 3. **End of day**: Use `./stop_kafka.sh`
 4. **Cleanup**: Use `./stop_kafka.sh --remove-data` (careful!)
 
