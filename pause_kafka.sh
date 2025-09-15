@@ -26,16 +26,15 @@ show_usage() {
     print_message "Kafka Docker Setup - Pause Script" $BLUE
     print_message "Usage: $0 [options]" $YELLOW
     print_message "Options:" $NC
-    print_message "  --resume, -r     Resume paused services" $NC
     print_message "  --status, -s     Show pause/resume status" $NC
     print_message "  --help, -h       Show this help message" $NC
     print_message "" $NC
-    print_message "This script provides quick pause/resume functionality:" $BLUE
+    print_message "This script provides quick pause functionality:" $BLUE
     print_message "  • Pause: Stops containers but preserves all data and state" $NC
-    print_message "  • Resume: Quickly restarts paused services" $NC
     print_message "  • Status: Shows current pause/resume state" $NC
     print_message "" $NC
     print_message "Use this for temporary stops (lunch break, meetings, etc.)" $YELLOW
+    print_message "To resume paused services, use './kafka_resume.sh'" $YELLOW
     print_message "For permanent shutdown, use './stop_kafka.sh'" $YELLOW
 }
 
@@ -71,47 +70,9 @@ pause_services() {
     
     print_message "✅ Services paused successfully!" $GREEN
     print_message "💾 All data and state preserved" $BLUE
-    print_message "🔄 Use './pause_kafka.sh --resume' to quickly restart" $YELLOW
+    print_message "🔄 Use './kafka_resume.sh' to quickly restart" $YELLOW
 }
 
-# Function to resume services
-resume_services() {
-    print_message "▶️  Resuming Kafka services..." $PURPLE
-    
-    if check_services_running; then
-        print_message "ℹ️  Services are already running" $BLUE
-        return 0
-    fi
-    
-    if ! check_services_paused; then
-        print_message "⚠️  No paused services found. Use './start_kafka.sh' to start fresh." $YELLOW
-        return 1
-    fi
-    
-    print_message "Starting paused containers..." $YELLOW
-    docker-compose start
-    
-    # Wait for services to be ready
-    print_message "Waiting for services to be ready..." $BLUE
-    sleep 10
-    
-    # Check if services are healthy
-    if check_services_running; then
-        print_message "✅ Services resumed successfully!" $GREEN
-        
-        # Show quick status
-        print_message "\n📊 Quick Status:" $BLUE
-        docker-compose ps --format "table {{.Name}}\t{{.Status}}\t{{.Ports}}"
-        
-        print_message "\n🔗 Access Points:" $BLUE
-        print_message "  • Kafka UI: http://localhost:8080" $NC
-        print_message "  • Kafka Broker: localhost:9092" $NC
-        print_message "  • Zookeeper: localhost:2181" $NC
-    else
-        print_message "❌ Failed to resume services. Check logs with 'docker-compose logs'" $RED
-        return 1
-    fi
-}
 
 # Function to show status
 show_status() {
@@ -145,9 +106,6 @@ case "${1:-pause}" in
     "pause"|"")
         pause_services
         ;;
-    "resume"|"--resume"|"-r")
-        resume_services
-        ;;
     "status"|"--status"|"-s")
         show_status
         ;;
@@ -163,7 +121,7 @@ esac
 
 print_message "\n💡 Quick Commands:" $BLUE
 print_message "  $0              - Pause services" $NC
-print_message "  $0 --resume     - Resume services" $NC
 print_message "  $0 --status     - Show status" $NC
+print_message "  ./kafka_resume.sh - Resume services" $NC
 print_message "  ./start_kafka.sh - Fresh start" $NC
 print_message "  ./stop_kafka.sh  - Complete shutdown" $NC
