@@ -13,15 +13,26 @@
 
 ### First Time Setup:
 ```bash
-./build_kafka.sh          # Complete build and start
+# From anywhere on your system:
+bash /path/to/kafka-docker-setup/build_kafka.sh
+
+# Or from the project directory:
+./build_kafka.sh
 ```
 
 ### Daily Usage:
 ```bash
-./start_kafka.sh          # Start services
-./pause_kafka.sh          # Quick pause
-./pause_kafka.sh --resume # Quick resume
-./stop_kafka.sh           # Complete shutdown
+# From anywhere on your system:
+bash /path/to/kafka-docker-setup/start_kafka.sh
+bash /path/to/kafka-docker-setup/pause_kafka.sh
+bash /path/to/kafka-docker-setup/pause_kafka.sh --resume
+bash /path/to/kafka-docker-setup/stop_kafka.sh
+
+# Or from the project directory:
+./start_kafka.sh
+./pause_kafka.sh
+./pause_kafka.sh --resume
+./stop_kafka.sh
 ```
 
 ## 📋 Script Details
@@ -84,3 +95,5 @@
 - **Data safety** with multiple stop options
 - **Quick operations** for daily development
 - **Complete setup** for new environments
+- **Run from anywhere** - no need to cd to project directory
+- **Absolute path support** - works with full paths from any location
