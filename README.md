@@ -151,6 +151,33 @@ docker exec kafka kafka-console-consumer \
   --bootstrap-server localhost:9092 --topic test-topic --from-beginning
 ```
 
+### Publish a Message over HTTP (Kafka UI API)
+
+Kafka UI exposes a POST endpoint that publishes a message, so no extra service is needed:
+
+```bash
+curl -X POST \
+  'http://localhost:8080/api/clusters/Local%20Kafka%20Cluster/topics/<topic>/messages' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "partition": 0,
+    "key": "my-key",
+    "content": "{\"hello\":\"world\"}",
+    "headers": {},
+    "keySerde": "String",
+    "valueSerde": "String"
+  }'
+```
+
+Notes (checked against the `provectuslabs/kafka-ui:v0.7.2` image used here):
+
+-   A `200` response with an empty body means the message was published.
+-   The topic must already exist. A missing topic returns `404 Topic not found` (it is not auto-created).
+-   `partition` is required, must be `>= 0`, and must exist on the topic. A partition that does not exist returns `400 Invalid partition` (for example `1` on a single-partition topic).
+-   Send every field shown above. Omitting `headers`, `keySerde` or `valueSerde` returns a `500 Value is undefined`. Use `"key": null` for no key.
+-   `content` is a string, so JSON messages must be escaped inside it.
+-   Only the `String` serde is covered here. This is Kafka UI's internal API, not a stable contract, and it has no authentication. Use it for local development only.
+
 ### Connect from Other Containers
 
 ```yaml
