@@ -18,7 +18,7 @@ NC='\033[0m' # No Color
 
 # Function to print colored output
 print_message() {
-    echo -e ta"${2}${1}${NC}"
+    echo -e "${2}${1}${NC}"
 }
 
 # Function to show usage
@@ -119,7 +119,10 @@ fi
 print_message "✅ docker-compose is available" $GREEN
 
 # Check if images exist (suggest build if missing)
-if ! docker images | grep -q "confluentinc/cp-kafka:7.4.0"; then
+if ! docker image inspect \
+    confluentinc/cp-zookeeper:7.4.0 \
+    confluentinc/cp-kafka:7.4.0 \
+    provectuslabs/kafka-ui:v0.7.2 > /dev/null 2>&1; then
     print_message "⚠️  Kafka images not found. Run './build_kafka.sh' first." $YELLOW
     print_message "💡 Proceeding with image pull..." $BLUE
     docker-compose pull
@@ -127,13 +130,16 @@ else
     print_message "✅ Required images are available" $GREEN
 fi
 
-# Start services
-print_message "Starting services..." $BLUE
-docker-compose up -d
+# Start core services first. Starting all services at once can leave kafka_ui
+# created but not running while Compose waits on health-based dependencies.
+print_message "Starting Zookeeper and Kafka..." $BLUE
+docker-compose up -d zookeeper kafka
 
-# Wait for services to be healthy
 wait_for_service_health "zookeeper"
 wait_for_service_health "kafka"
+
+print_message "Starting Kafka UI..." $BLUE
+docker-compose up -d kafka_ui
 wait_for_service_health "kafka_ui"
 
 print_message "All services are running and healthy!" $GREEN
